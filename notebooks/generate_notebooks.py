@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
-"""Generate student demo Jupyter notebooks covering all 3-day course material."""
+"""Legacy notebook source retained for reference.
+
+The course notebooks are now maintained and executed directly. Running this file
+must not overwrite the verified notebooks with the older, incompatible templates.
+Use ``execute_notebooks.py`` followed by ``validate_notebooks.py`` instead.
+"""
 
 import nbformat as nbf
+import sys
 from nbformat.v4 import new_notebook, new_markdown_cell, new_code_cell
 from pathlib import Path
 
@@ -1163,10 +1169,7 @@ plt.show()"""),
 
 
 if __name__ == "__main__":
-    write_notebook("Day1_Python_Pandas.ipynb", day1_cells)
-    write_notebook("Day2_EDA_Visualization_Statistics.ipynb", day2_cells)
-    write_notebook("Day3_Machine_Learning.ipynb", day3_cells)
-    write_notebook("Capstone_Titanic.ipynb", titanic_cells)
-    write_notebook("Capstone_Iris.ipynb", iris_cells)
-    write_notebook("Capstone_House_Prices.ipynb", house_cells)
-    print("\nAll notebooks generated successfully.")
+    print("ERROR: This legacy generator is intentionally disabled.", file=sys.stderr)
+    print("The verified .ipynb files in this directory are the course source of truth.", file=sys.stderr)
+    print("Run execute_notebooks.py, then validate_notebooks.py, to verify them.", file=sys.stderr)
+    raise SystemExit(2)

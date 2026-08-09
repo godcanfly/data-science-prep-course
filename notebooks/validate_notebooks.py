@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import sys
 from pathlib import Path
 from typing import Iterable
@@ -31,21 +32,33 @@ def validate_notebook(path: Path) -> list[str]:
         return [f"cannot read a valid v4 notebook: {exc}"]
 
     transformer = TransformerManager()
+    kernel_language = str(
+        notebook.metadata.get("kernelspec", {}).get(
+            "language", notebook.metadata.get("language_info", {}).get("name", "")
+        )
+    ).lower()
+    is_python_kernel = kernel_language.startswith("python")
     code_cells = [
         (index, cell)
         for index, cell in enumerate(notebook.cells, start=1)
         if cell.cell_type == "code" and cell.source.strip()
     ]
 
-    for index, cell in code_cells:
-        try:
-            transformed = transformer.transform_cell(cell.source)
-            compile(transformed, f"{path.name}:cell-{index}", "exec")
-        except SyntaxError as exc:
-            location = f"line {exc.lineno}" if exc.lineno else "unknown line"
-            errors.append(f"cell {index} has invalid Python syntax ({location}): {exc.msg}")
-        except Exception as exc:
-            errors.append(f"cell {index} cannot be parsed: {type(exc).__name__}: {exc}")
+    if is_python_kernel:
+        for index, cell in code_cells:
+            try:
+                transformed = transformer.transform_cell(cell.source)
+                compile(
+                    transformed,
+                    f"{path.name}:cell-{index}",
+                    "exec",
+                    flags=ast.PyCF_ALLOW_TOP_LEVEL_AWAIT,
+                )
+            except SyntaxError as exc:
+                location = f"line {exc.lineno}" if exc.lineno else "unknown line"
+                errors.append(f"cell {index} has invalid Python syntax ({location}): {exc.msg}")
+            except Exception as exc:
+                errors.append(f"cell {index} cannot be parsed: {type(exc).__name__}: {exc}")
 
     for index, cell in enumerate(notebook.cells, start=1):
         if cell.cell_type != "code":
@@ -56,6 +69,21 @@ def validate_notebook(path: Path) -> list[str]:
                     f"cell {index} saved an error output: "
                     f"{output.get('ename', 'Error')}: {output.get('evalue', '')}"
                 )
+            elif output.output_type == "stream":
+                stream_text = output.get("text", "")
+                if output.get("name") == "stderr" and str(stream_text).strip():
+                    errors.append(f"cell {index} has non-empty stderr output")
+            elif output.output_type == "execute_result":
+                if output.get("execution_count") != cell.execution_count:
+                    errors.append(
+                        f"cell {index} execute_result count "
+                        f"{output.get('execution_count')} does not match cell count "
+                        f"{cell.execution_count}"
+                    )
+                if not output.get("data"):
+                    errors.append(f"cell {index} has an empty execute_result output")
+            elif output.output_type == "display_data" and not output.get("data"):
+                errors.append(f"cell {index} has an empty display_data output")
 
     actual_counts = [cell.execution_count for _, cell in code_cells]
     expected_counts = list(range(1, len(code_cells) + 1))

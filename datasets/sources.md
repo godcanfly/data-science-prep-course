@@ -9,11 +9,14 @@ All datasets are freely available online. Use the links below or download from K
 **Best for**: Classification, survival prediction
 
 **Sources**:
-- Direct CSV: `https://raw.githubusercontent.com/datasciencedoc/data/master/titanic.csv`
-- Kaggle: `https://www.kaggle.com/c/titanic`
-- Seaborn built-in: `sns.load_dataset("titanic")`
+- Primary CSV: `https://raw.githubusercontent.com/mwaskom/seaborn-data/master/titanic.csv`
+- Course snapshot: `datasets/titanic.csv`
+- Snapshot SHA-256: `81787d320d7f7b03df935e91de8bd19e11d45c5bbcab86ef4d4a76dc91b7d4f2`
+- Upstream project: `https://github.com/mwaskom/seaborn-data`
 
-**Columns**: PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked
+**Columns**: survived, pclass, sex, age, sibsp, parch, fare, embarked, class, who, adult_male, deck, embark_town, alive, alone
+
+The notebooks try the primary URL first and fall back to the local snapshot when the network is unavailable. They validate the exact 891-row, 15-column schema before analysis.
 
 ---
 
@@ -57,7 +60,7 @@ All datasets are freely available online. Use the links below or download from K
 ### From URL
 ```python
 import pandas as pd
-url = "https://raw.githubusercontent.com/datasciencedoc/data/master/titanic.csv"
+url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/titanic.csv"
 df = pd.read_csv(url)
 ```
 

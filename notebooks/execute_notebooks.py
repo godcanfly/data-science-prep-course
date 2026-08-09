@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import os
 import sys
+import tempfile
 from pathlib import Path
 
 import nbformat
@@ -42,12 +44,25 @@ def execute_notebook(path: Path, timeout: int) -> None:
     if counts != expected:
         raise RuntimeError(f"execution counts are not continuous: {counts}")
 
-    temporary_path = path.with_suffix(".executed.tmp.ipynb")
+    temporary_path: Path | None = None
     try:
-        nbformat.write(executed, temporary_path)
-        temporary_path.replace(path)
+        with tempfile.NamedTemporaryFile(
+            mode="w",
+            encoding="utf-8",
+            dir=path.parent,
+            prefix=f".{path.stem}.",
+            suffix=".tmp.ipynb",
+            delete=False,
+        ) as temporary_file:
+            temporary_path = Path(temporary_file.name)
+            nbformat.write(executed, temporary_file)
+            temporary_file.flush()
+            os.fsync(temporary_file.fileno())
+        os.replace(temporary_path, path)
+        temporary_path = None
     finally:
-        temporary_path.unlink(missing_ok=True)
+        if temporary_path is not None:
+            temporary_path.unlink(missing_ok=True)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
