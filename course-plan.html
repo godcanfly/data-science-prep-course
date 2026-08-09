@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3-Day Python + AI + Data Science Course</title>
+  <style>
+    :root {
+      --pink: #ff9a9e;
+      --yellow: #f6d365;
+      --green: #84fab0;
+      --blue: #8fd3f4;
+      --purple: #a18cd1;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      color: #2d3436;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(90deg, var(--pink), var(--yellow), var(--green), var(--blue), var(--purple));
+      background-size: 400% 400%;
+      animation: rainbow 12s ease infinite;
+      color: white;
+      padding: 36px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    header h1 { margin: 0 0 10px; font-size: 1.9rem; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+    header p { margin: 0; font-size: 1.05rem; }
+    .floating { position: absolute; font-size: 1.8rem; opacity: 0.25; animation: float 6s ease-in-out infinite; }
+    .floating:nth-child(1) { top: 10%; left: 8%; }
+    .floating:nth-child(2) { top: 15%; right: 10%; animation-delay: 1s; }
+    .floating:nth-child(3) { bottom: 15%; left: 15%; animation-delay: 2s; }
+    .floating:nth-child(4) { bottom: 10%; right: 8%; animation-delay: 3s; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+    .topbar {
+      background: white;
+      border-bottom: 1px solid #e0e0e0;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .mode-toggle { display: flex; gap: 8px; }
+    .mode-btn {
+      border: none;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .mode-btn.student { background: linear-gradient(135deg, #ff9a9e, #f6d365); }
+    .mode-btn.teacher { background: linear-gradient(135deg, #a18cd1, #8fd3f4); }
+    .mode-btn.active { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .menu-toggle {
+      display: none;
+      background: #6c5ce7;
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .layout {
+      display: flex;
+      flex: 1;
+      max-width: 1400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    nav {
+      width: 260px;
+      background: white;
+      border-right: 1px solid #e0e0e0;
+      padding: 20px 0;
+      flex-shrink: 0;
+      overflow-y: auto;
+      max-height: calc(100vh - 140px);
+      position: sticky;
+      top: 62px;
+    }
+    nav h3 { font-size: 0.75rem; text-transform: uppercase; color: #b2bec3; padding: 0 20px; margin: 18px 0 8px; letter-spacing: 1px; }
+    nav a { display: block; padding: 11px 20px; color: #2d3436; text-decoration: none; border-left: 4px solid transparent; transition: all 0.2s; cursor: pointer; }
+    nav a:hover, nav a.active { background: #f8f9fa; border-left-color: #6c5ce7; color: #6c5ce7; }
+    main { flex: 1; padding: 28px; min-width: 0; }
+
+    .card { background: white; border-radius: 20px; padding: 26px; margin-bottom: 22px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); }
+    .card h2 { margin-top: 0; color: #6c5ce7; font-size: 1.5rem; }
+    .card h3 { color: #e17055; margin-top: 26px; }
+    .card h4 { color: #0984e3; margin-top: 20px; }
+    .big-emoji { font-size: 2.2rem; display: block; margin-bottom: 6px; }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-top: 16px; }
+    .box { border-radius: 16px; padding: 18px; text-align: center; background: linear-gradient(135deg, #ffecd2, #fcb69f); }
+    .box:nth-child(2) { background: linear-gradient(135deg, #a8edea, #fed6e3); }
+    .box:nth-child(3) { background: linear-gradient(135deg, #d299c2, #fef9d7); }
+    .box:nth-child(4) { background: linear-gradient(135deg, #cfd9df, #e2ebf0); }
+    .box h4 { margin-top: 0; font-size: 1rem; }
+
+    .timeline { position: relative; padding-left: 24px; margin-top: 14px; }
+    .timeline::before { content: ''; position: absolute; left: 6px; top: 8px; bottom: 8px; width: 3px; background: linear-gradient(180deg, var(--pink), var(--yellow), var(--green)); border-radius: 2px; }
+    .timeline-item { position: relative; margin-bottom: 14px; padding: 12px 16px; background: #fff8f0; border-radius: 14px; }
+    .timeline-item::before { content: ''; position: absolute; left: -22px; top: 16px; width: 11px; height: 11px; border-radius: 50%; background: var(--purple); border: 2px solid white; box-shadow: 0 0 0 2px var(--purple); }
+    .time { display: inline-block; background: #6c5ce7; color: white; padding: 2px 10px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; margin-bottom: 4px; }
+    .timeline-item h4 { margin: 4px 0 6px; }
+    .timeline-item p { margin: 0; }
+
+    .code-block { background: #2d3436; color: #dfe6e9; padding: 26px 16px 16px; border-radius: 14px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.85rem; margin: 16px 0 12px; white-space: pre; line-height: 1.5; position: relative; }
+    .code-block::before { content: '✨ Magic Code'; position: absolute; top: -9px; left: 12px; background: #00b894; color: white; padding: 2px 8px; border-radius: 8px; font-size: 0.7rem; font-weight: bold; }
+    .code-block.teacher::before { content: '👩‍🏫 Instructor Code'; background: #a18cd1; }
+
+    .checklist { list-style: none; padding: 0; margin-top: 14px; }
+    .checklist li { padding: 10px 14px; margin-bottom: 8px; background: #f8f9fa; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: background 0.2s; }
+    .checklist li:hover { background: #e8f8f5; }
+    .checklist li.checked { background: #d5f5e3; text-decoration: line-through; }
+    .check { width: 20px; height: 20px; border: 2px solid #00b894; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: transparent; transition: all 0.2s; flex-shrink: 0; }
+    .checklist li.checked .check { background: #00b894; color: white; }
+    .progress-bar { width: 100%; height: 24px; background: #dfe6e9; border-radius: 12px; overflow: hidden; margin: 16px 0; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--pink), var(--yellow), var(--green)); border-radius: 12px; transition: width 0.4s; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: white; font-weight: bold; font-size: 0.8rem; }
+
+    .tip-box { background: linear-gradient(135deg, #fff1eb, #ace0f9); border-left: 5px solid #0984e3; padding: 16px 20px; border-radius: 14px; margin: 16px 0; }
+    .tip-box h4 { margin-top: 0; color: #0984e3; }
+
+    table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.92rem; }
+    th, td { border: 1px solid #dfe6e9; padding: 9px; text-align: left; }
+    th { background: #f1f2f6; font-weight: bold; }
+    tr:nth-child(even) { background: #fafafa; }
+
+    details { background: #f8f9fa; border-radius: 14px; margin: 14px 0; padding: 14px 18px; }
+    summary { font-weight: bold; cursor: pointer; color: #6c5ce7; font-size: 1rem; }
+    details[open] { background: #fff8f0; }
+    .slide-box { background: linear-gradient(135deg, #e0f7fa, #fff8f0); border-radius: 14px; padding: 14px 16px; margin: 12px 0; }
+    .slide-box h4 { margin-top: 0; }
+    .slide-box ul, .slide-box ol { margin: 8px 0; }
+
+    footer { background: linear-gradient(90deg, var(--purple), var(--blue)); color: white; text-align: center; padding: 28px 20px; }
+    footer h2 { margin-top: 0; }
+    .top-link { color: white; text-decoration: underline; cursor: pointer; }
+
+    @media (max-width: 768px) {
+      .layout { flex-direction: column; }
+      nav { width: 100%; max-height: none; position: static; border-right: none; border-bottom: 1px solid #e0e0e0; display: none; }
+      nav.open { display: block; }
+      .menu-toggle { display: inline-block; }
+      main { padding: 18px; }
+      header h1 { font-size: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="floating">🐍</div>
+  <div class="floating">📊</div>
+  <div class="floating">🤖</div>
+  <div class="floating">🚀</div>
+  <h1>3-Day Python + AI + Data Science Adventure</h1>
+  <p>One page. Two modes. Everything you need. 🎓</p>
+</header>
+
+<div class="topbar">
+  <button class="menu-toggle" onclick="toggleMenu()">☰ Menu</button>
+  <div class="mode-toggle">
+    <button class="mode-btn student active" onclick="setMode('student')">🎓 Student</button>
+    <button class="mode-btn teacher" onclick="setMode('teacher')">👩‍🏫 Teacher</button>
+  </div>
+</div>
+
+<div class="layout">
+  <nav id="sidebar"></nav>
+  <main id="content"></main>
+</div>
+
+<footer>
+  <h2>You've Got This! 💪</h2>
+  <p>Data science is about asking good questions, cleaning messy data, and telling clear stories.</p>
+  <span class="top-link" onclick="window.scrollTo({top:0, behavior:'smooth'})">Back to top 🚀</span>
+</footer>
+
+<script>
+// ===================== DATA STORE =====================
+const codeSnippets = {
+  d1_intro: `print("Hello, Data Science!")
+name = "Alice"
+scores = [85, 90, 78, 92]
+print(f"{name} is ready to learn!")`,
+
+  d1_pandas: `import pandas as pd
+url = "https://raw.githubusercontent.com/datasciencedoc/data/master/titanic.csv"
+df = pd.read_csv(url)
+df.head()
+df.describe()`,
+
+  d1_filter: `df[df["Sex"] == "female"]
+df["FamilySize"] = df["SibSp"] + df["Parch"] + 1
+df.groupby("Sex")["Survived"].mean()`,
+
+  d2_stats: `df["Age"].mean()
+df["Age"].median()
+df[["Age", "Fare", "Survived"]].corr()`,
+
+  d2_viz: `import matplotlib.pyplot as plt
+import seaborn as sns
+sns.histplot(data=df, x="Age", kde=True)
+sns.heatmap(corr, annot=True, cmap="coolwarm")
+plt.show()`,
+
+  d3_ml: `from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)`,
+
+  d3_eval: `from sklearn.metrics import accuracy_score
+predictions = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, predictions))`,
+
+  d1_live: `print("Hello, Data Science!")
+name = "Alice"
+age = 18
+print(f"{name} is {age} years old.")
+
+scores = [85, 90, 78, 92]
+print(scores[0])
+print(scores[-1])
+scores.append(88)
+print(len(scores))
+
+for s in scores:
+    print(s)
+
+def average(numbers):
+    return sum(numbers) / len(numbers)
+
+print(average(scores))
+
+import pandas as pd
+url = "https://raw.githubusercontent.com/datasciencedoc/data/master/titanic.csv"
+df = pd.read_csv(url)
+
+df.head()
+df.shape
+df.columns
+df.info()
+df.describe()
+
+df["Name"].head()
+df[["Name", "Age", "Sex", "Survived"]].head()
+
+df[df["Age"] > 30].head()
+df[df["Sex"] == "female"].head()
+
+df["FamilySize"] = df["SibSp"] + df["Parch"] + 1
+df.isnull().sum()
+df["Age"] = df["Age"].fillna(df["Age"].median())
+
+df.groupby("Sex")["Survived"].mean()
+df.groupby("Pclass").agg({"Age": "mean", "Fare": "mean", "Survived": "mean"})
+
+df.to_csv("cleaned_titanic.csv", index=False)
+print("File saved!")`,
+
+  d1_solutions: `import pandas as pd
+
+name = "Alice"
+age = 18
+height = 1.65
+likes_data_science = True
+print(name, age, height, likes_data_science)
+
+scores = [72, 88, 91, 67, 95, 83]
+print("First:", scores[0])
+print("Last:", scores[-1])
+scores.append(78)
+print("Total:", len(scores))
+print("Highest:", max(scores))
+print("Lowest:", min(scores))
+
+for s in scores:
+    print(s * 1.05)
+
+def calculate_average(numbers):
+    return sum(numbers) / len(numbers)
+print("Average:", calculate_average(scores))
+
+movie = {"title": "Inception", "year": 2010, "director": "Christopher Nolan", "rating": 8.8}
+print(movie["title"])
+movie["genre"] = "Sci-Fi"
+print(movie)
+
+url = "https://raw.githubusercontent.com/datasciencedoc/data/master/titanic.csv"
+df = pd.read_csv(url)
+print(df.shape)
+print(df.columns.tolist())
+print(df.head(8))
+print(df.describe())
+
+print(df[df["Sex"] == "female"].head())
+print(df[df["Fare"] > 50].head())
+print(df[(df["Pclass"] == 1) & (df["Survived"] == 1)].head())
+print(df.sort_values("Age", ascending=False).head())
+
+print(df["Age"].mean())
+print(df.groupby("Pclass")["Survived"].mean())
+print(df.groupby("Embarked")["Fare"].mean())`,
+
+  d2_live: `import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+url = "https://raw.githubusercontent.com/datasciencedoc/data/master/titanic.csv"
+df = pd.read_csv(url)
+
+df.shape
+df.columns
+df.describe()
+df.isnull().sum()
+
+df["Sex"].value_counts()
+df["Pclass"].value_counts()
+
+print(df["Age"].mean(), df["Age"].median(), df["Age"].std())
+print(df[df["Sex"] == "female"]["Survived"].mean())
+print(df[df["Sex"] == "male"]["Survived"].mean())
+
+df["FamilySize"] = df["SibSp"] + df["Parch"] + 1
+corr = df[["Age", "Fare", "Pclass", "Survived", "FamilySize"]].corr()
+
+plt.figure(figsize=(6, 4))
+sns.countplot(data=df, x="Survived")
+plt.title("Survival Counts")
+plt.show()
+
+plt.figure(figsize=(8, 5))
+sns.histplot(data=df, x="Age", kde=True, bins=20)
+plt.title("Age Distribution")
+plt.show()
+
+plt.figure(figsize=(8, 5))
+sns.boxplot(data=df, x="Pclass", y="Age")
+plt.title("Age by Passenger Class")
+plt.show()
+
+plt.figure(figsize=(8, 6))
+sns.heatmap(corr, annot=True, cmap="coolwarm")
+plt.title("Correlation Matrix")
+plt.show()`,
+
+  d2_solutions: `import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+url = "https://raw.githubusercontent.com/datasciencedoc/data/master/titanic.csv"
+df = pd.read_csv(url)
+
+print(df.isnull().sum())
+print(f"Cabin missing: {df['Cabin'].isnull().sum() / len(df) * 100:.1f}%")
+print(df["Embarked"].nunique())
+print(df["Embarked"].value_counts())
+
+print(df["Fare"].mean(), df["Fare"].median(), df["Fare"].std(), df["Fare"].min(), df["Fare"].max())
+
+print(df[df["Pclass"] == 1]["Survived"].mean())
+print(df[df["Pclass"] == 3]["Survived"].mean())
+print(df[(df["Sex"] == "female") & (df["Age"] < 18)]["Survived"].mean())
+
+plt.figure(figsize=(6, 4))
+plt.bar(df["Pclass"].value_counts().sort_index().index, df["Pclass"].value_counts().sort_index().values)
+plt.title("Passengers by Class")
+plt.show()
+
+plt.figure(figsize=(8, 5))
+plt.hist(df["Fare"], bins=30, edgecolor="black")
+plt.title("Distribution of Fares")
+plt.show()
+
+plt.figure(figsize=(8, 5))
+for survived, color in [(0, "red"), (1, "green")]:
+    subset = df[df["Survived"] == survived]
+    plt.scatter(subset["Age"], subset["Fare"], alpha=0.5, label=f"Survived={survived}", color=color)
+plt.legend()
+plt.show()
+
+sns.countplot(data=df, x="Pclass", hue="Sex")
+plt.show()
+sns.boxplot(data=df, x="Survived", y="Fare")
+plt.show()
+sns.histplot(data=df, x="Age", kde=True, bins=20)
+plt.show()
+
+numeric_cols = ["Age", "Fare", "Pclass", "SibSp", "Parch", "Survived"]
+corr = df[numeric_cols].corr()
+sns.heatmap(corr, annot=True, cmap="coolwarm")
+plt.show()
+
+df["FamilySize"] = df["SibSp"] + df["Parch"] + 1
+survival_by_family = df.groupby("FamilySize")["Survived"].mean().reset_index()
+sns.barplot(data=survival_by_family, x="FamilySize", y="Survived")
+plt.show()`,
+
+  d3_live: `import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+url = "https://raw.githubusercontent.com/datasciencedoc/data/master/titanic.csv"
+df = pd.read_csv(url)
+
+features = ["Pclass", "Sex", "Age", "Fare"]
+X = df[features].copy()
+y = df["Survived"]
+
+X["Age"] = X["Age"].fillna(X["Age"].median())
+X["Sex"] = X["Sex"].map({"male": 0, "female": 1})
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+predictions = model.predict(X_test)
+
+print("Accuracy:", accuracy_score(y_test, predictions))
+print("\nConfusion Matrix:")
+print(confusion_matrix(y_test, predictions))
+print("\nClassification Report:")
+print(classification_report(y_test, predictions))
+
+importance = pd.DataFrame({
+    "Feature": X.columns,
+    "Coefficient": model.coef_[0]
+})
+print("\nFeature Importance:")
+print(importance)`,
+
+  d3_solutions: `import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+url = "https://raw.githubusercontent.com/datasciencedoc/data/master/titanic.csv"
+df = pd.read_csv(url)
+
+features = ["Pclass", "Sex", "Age", "Fare"]
+X = df[features].copy()
+y = df["Survived"]
+
+X["Age"] = X["Age"].fillna(X["Age"].median())
+X["Sex"] = X["Sex"].map({"male": 0, "female": 1})
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+predictions = model.predict(X_test)
+print("Accuracy:", accuracy_score(y_test, predictions))
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, predictions))
+print("Classification Report:")
+print(classification_report(y_test, predictions))
+
+importance = pd.DataFrame({
+    "Feature": X.columns,
+    "Coefficient": model.coef_[0]
+}).sort_values("Coefficient", ascending=False)
+print(importance)
+
+tree = DecisionTreeClassifier(max_depth=3, random_state=42)
+tree.fit(X_train, y_train)
+tree_pred = tree.predict(X_test)
+print("Tree Accuracy:", accuracy_score(y_test, tree_pred))
+
+X_bonus = df[["Pclass", "Sex", "Age", "Fare", "Embarked"]].copy()
+X_bonus["Age"] = X_bonus["Age"].fillna(X_bonus["Age"].median())
+X_bonus["Sex"] = X_bonus["Sex"].map({"male": 0, "female": 1})
+X_bonus["Embarked"] = X_bonus["Embarked"].fillna("S")
+X_bonus = pd.get_dummies(X_bonus, columns=["Embarked"], drop_first=True)
+X_train_b, X_test_b, y_train_b, y_test_b = train_test_split(X_bonus, y, test_size=0.2, random_state=42)
+model_b = LogisticRegression(max_iter=1000)
+model_b.fit(X_train_b, y_train_b)
+print("Bonus Accuracy:", accuracy_score(y_test_b, model_b.predict(X_test_b)))`,
+
+  titanic: `import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+url = "https://raw.githubusercontent.com/datasciencedoc/data/master/titanic.csv"
+df = pd.read_csv(url)
+
+X = df[["Pclass", "Sex", "Age", "Fare"]].copy()
+y = df["Survived"]
+X["Age"] = X["Age"].fillna(X["Age"].median())
+X["Sex"] = X["Sex"].map({"male": 0, "female": 1})
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+print("Accuracy:", accuracy_score(y_test, model.predict(X_test)))`,
+
+  iris: `import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+
+df = sns.load_dataset("iris")
+X = df[["sepal_length", "sepal_width", "petal_length", "petal_width"]]
+y = df["species"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+print("Accuracy:", accuracy_score(y_test, model.predict(X_test)))`,
+
+  housing: `from sklearn.datasets import fetch_california_housing
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
+
+housing = fetch_california_housing(as_frame=True)
+df = housing.frame
+X = df.drop(columns=["MedHouseVal"])
+y = df["MedHouseVal"]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+model = LinearRegression()
+model.fit(X_train, y_train)
+predictions = model.predict(X_test)
+print("MAE:", mean_absolute_error(y_test, predictions))`
+};
+
+// ===================== DOM HELPERS =====================
+function createEl(tag, className, html) {
+  const el = document.createElement(tag);
+  if (className) el.className = className;
+  if (html !== undefined) el.innerHTML = html;
+  return el;
+}
+
+function createCard(title) {
+  const card = createEl('div', 'card');
+  if (title) {
+    const h2 = createEl('h2', '', title);
+    card.appendChild(h2);
+  }
+  return card;
+}
+
+function createCodeBlock(code, isTeacher) {
+  const pre = createEl('pre', 'code-block' + (isTeacher ? ' teacher' : ''));
+  pre.textContent = code;
+  return pre;
+}
+
+function createBox(title, text) {
+  const box = createEl('div', 'box');
+  box.appendChild(createEl('h4', '', title));
+  box.appendChild(createEl('p', '', text));
+  return box;
+}
+
+function createTimeline(items) {
+  const tl = createEl('div', 'timeline');
+  items.forEach(item => {
+    const div = createEl('div', 'timeline-item');
+    if (item.time) div.appendChild(createEl('span', 'time', item.time));
+    div.appendChild(createEl('h4', '', item.title));
+    if (item.text) div.appendChild(createEl('p', '', item.text));
+    if (item.code) div.appendChild(createCodeBlock(item.code, false));
+    tl.appendChild(div);
+  });
+  return tl;
+}
+
+function createTable(headers, rows) {
+  const table = createEl('table');
+  const thead = createEl('thead');
+  const tr = createEl('tr');
+  headers.forEach(h => tr.appendChild(createEl('th', '', h)));
+  thead.appendChild(tr);
+  table.appendChild(thead);
+  const tbody = createEl('tbody');
+  rows.forEach(row => {
+    const r = createEl('tr');
+    row.forEach(cell => r.appendChild(createEl('td', '', cell)));
+    tbody.appendChild(r);
+  });
+  table.appendChild(tbody);
+  return table;
+}
+
+function createSlideBox(title, contentFn) {
+  const box = createEl('div', 'slide-box');
+  box.appendChild(createEl('h4', '', title));
+  if (typeof contentFn === 'string') {
+    box.appendChild(createEl('p', '', contentFn));
+  } else {
+    box.appendChild(contentFn);
+  }
+  return box;
+}
+
+function createDetails(summary, contentFn) {
+  const det = createEl('details');
+  det.appendChild(createEl('summary', '', summary));
+  det.appendChild(contentFn);
+  return det;
+}
+
+function createTip(title, text) {
+  const box = createEl('div', 'tip-box');
+  box.appendChild(createEl('h4', '', title));
+  box.appendChild(createEl('p', '', text));
+  return box;
+}
+
+// ===================== PAGES =====================
+const pages = {
+  student: {
+    welcome: {
+      title: '🌟 Welcome!',
+      render: () => {
+        const card = createCard('Welcome to Your Adventure!');
+        card.appendChild(createEl('p', '', 'In just 3 days, you will go from "What is Python?" to "I built my first AI model!" You will have a real project, a GitHub portfolio, and confidence for university.'));
+        const grid = createEl('div', 'grid-2');
+        grid.appendChild(createBox('🎯 Practical', '80% hands-on coding. No boring lectures.'));
+        grid.appendChild(createBox('🎨 Visual', 'Make beautiful charts and colorful data stories.'));
+        grid.appendChild(createBox('🏆 Portfolio', 'Finish with a real project you can show off.'));
+        grid.appendChild(createBox('🎓 University Ready', 'Build confidence before your first semester.'));
+        card.appendChild(grid);
+        return card;
+      }
+    },
+    progress: {
+      title: '🎮 Progress Tracker',
+      render: () => {
+        const card = createCard('Your Progress Tracker');
+        card.appendChild(createEl('p', '', 'Click each task as you complete it. Watch the magic bar grow!'));
+        card.appendChild(createEl('div', 'progress-bar', '<div class="progress-fill" id="progressFill">0%</div>'));
+        const ul = createEl('ul', 'checklist');
+        ul.id = 'mainChecklist';
+        const tasks = [
+          'Opened Google Colab for the first time',
+          'Wrote my first Python print statement',
+          'Loaded a real dataset with Pandas',
+          'Created a chart with Matplotlib',
+          'Built my first machine learning model',
+          'Uploaded a project to GitHub'
+        ];
+        tasks.forEach(t => {
+          const li = createEl('li');
+          li.innerHTML = '<span class="check">✓</span> ' + t;
+          li.addEventListener('click', function() {
+            this.classList.toggle('checked');
+            updateProgress();
+          });
+          ul.appendChild(li);
+        });
+        card.appendChild(ul);
+        card.appendChild(createEl('div', 'celebrate', '🎉 YOU ARE A DATA SCIENTIST! 🎉'));
+        return card;
+      }
+    },
+    day1: {
+      title: '🐍 Day 1',
+      render: () => {
+        const card = createCard('🐍 Day 1: Python + Pandas Magic');
+        card.appendChild(createEl('p', '', '<strong>Goal:</strong> Learn to speak Python and wrangle data tables.'));
+        card.appendChild(createTimeline([
+          { time: '09:00', title: 'Welcome & Setup 🎉', text: 'Open Google Colab and write your first line of code.' },
+          { time: '09:30', title: 'Python Basics 🚀', text: 'Variables, lists, dictionaries, loops, functions.', code: codeSnippets.d1_intro },
+          { time: '10:45', title: 'Python Practice 💪', text: 'Small exercises to make your fingers remember the code.' },
+          { time: '13:00', title: 'Meet Pandas 🐼', text: 'Load CSVs, inspect rows, and feel the power of data tables.', code: codeSnippets.d1_pandas },
+          { time: '14:00', title: 'Filter & Transform ✨', text: 'Find the passengers you want, add columns, clean data.', code: codeSnippets.d1_filter },
+          { time: '16:30', title: 'Save Your First Dataset 🎁', text: 'You will have: a cleaned CSV + summary statistics.' }
+        ]));
+        card.appendChild(createTip('💡 Day 1 Mindset', 'Every error is a clue. Debugging is 50% of programming — and it makes you smarter!'));
+        return card;
+      }
+    },
+    day2: {
+      title: '📊 Day 2',
+      render: () => {
+        const card = createCard('📊 Day 2: Discover Stories in Data');
+        card.appendChild(createEl('p', '', '<strong>Goal:</strong> Find hidden patterns and paint them with beautiful charts.'));
+        card.appendChild(createTimeline([
+          { time: '09:00', title: 'Recap Quiz 🧠', text: 'Quick review. You already know more than you think!' },
+          { time: '09:30', title: 'Exploratory Data Analysis 🕵️‍♀️', text: 'Ask questions, find missing data, compute averages, understand correlation.', code: codeSnippets.d2_stats },
+          { time: '13:00', title: 'Matplotlib & Seaborn Art 🎨', text: 'Turn boring numbers into colorful charts.', code: codeSnippets.d2_viz },
+          { time: '15:00', title: 'Build Your EDA Report 📋', text: 'You will have: a notebook with 6+ charts and 5 key insights.' }
+        ]));
+        card.appendChild(createTip('💡 Day 2 Mindset', 'Charts are not just pretty pictures. They tell stories that tables hide.'));
+        return card;
+      }
+    },
+    day3: {
+      title: '🤖 Day 3',
+      render: () => {
+        const card = createCard('🤖 Day 3: Build Your First AI Model');
+        card.appendChild(createEl('p', '', '<strong>Goal:</strong> Train a computer to make predictions — your first real ML project!'));
+        card.appendChild(createTimeline([
+          { time: '09:00', title: 'Recap Day 2 🌈', text: 'Review your charts and celebrate how far you have come.' },
+          { time: '09:30', title: 'Machine Learning Magic 🧙‍♀️', text: 'Learn the workflow and build your first model.', code: codeSnippets.d3_ml },
+          { time: '13:00', title: 'Evaluate Your Model 🏆', text: 'Accuracy, confusion matrix, feature importance.', code: codeSnippets.d3_eval },
+          { time: '15:00', title: 'Capstone Project + Demo 🎓', text: 'You will have: a complete project uploaded to GitHub + a 3-minute presentation.' }
+        ]));
+        card.appendChild(createTip('💡 Day 3 Mindset', 'Your first model does not need to be perfect. A simple working model beats a fancy broken one.'));
+        return card;
+      }
+    },
+    projects: {
+      title: '🎁 Projects',
+      render: () => {
+        const card = createCard('Choose Your Capstone Project');
+        card.appendChild(createEl('p', '', 'Pick the one that excites you most. All are beginner-friendly and look great on GitHub!'));
+        const grid = createEl('div', 'grid-3');
+        grid.appendChild(createBox('🚢 Titanic Survival', 'Predict who survived the famous shipwreck. Best for learning classification.'));
+        grid.appendChild(createBox('🌸 Iris Flowers', 'Identify flower species from measurements. Clean and satisfying.'));
+        grid.appendChild(createBox('🏠 House Prices', 'Predict home prices from neighborhood data. Classic regression.'));
+        card.appendChild(grid);
+        return card;
+      }
+    },
+    next: {
+      title: '🚀 Next Steps',
+      render: () => {
+        const card = createCard('30-Day Post-Course Power Plan');
+        card.appendChild(createTimeline([
+          { time: 'Week 1', title: 'Rebuild from Memory', text: 'Rebuild all 3 notebooks without copying. This locks the skills into your brain.' },
+          { time: 'Week 2', title: 'Kaggle Competitions', text: 'Complete 2 "Getting Started" competitions on Kaggle.' },
+          { time: 'Week 3', title: 'GitHub Portfolio', text: 'Upload 3 polished projects to GitHub with README files.' },
+          { time: 'Week 4', title: 'Read & Watch', text: 'One data science article or lecture per day. Stay curious!' }
+        ]));
+        const tools = createCard('🛠️ Tools You Need (All Free!)');
+        tools.appendChild(createEl('ul', '', `
+          <li><strong>Google Colab</strong> — free Python notebooks in your browser</li>
+          <li><strong>GitHub</strong> — your public portfolio of projects</li>
+          <li><strong>Kaggle</strong> — datasets and friendly competitions</li>
+          <li><strong>Stack Overflow</strong> — every coder's best friend</li>
+          <li><strong>StatQuest YouTube</strong> — statistics explained simply</li>
+        `));
+        const container = createEl('div');
+        container.appendChild(card);
+        container.appendChild(tools);
+        return container;
+      }
+    }
+  },
+  teacher: {
+    overview: {
+      title: '🎯 Overview',
+      render: () => {
+        const c1 = createCard('Course Overview');
+        c1.appendChild(createEl('p', '', '<strong>Target:</strong> Student entering a US university Data Science program. May have zero or beginner Python experience.'));
+        c1.appendChild(createEl('p', '', '<strong>Goal:</strong> Build confidence, teach practical tools, create a first portfolio project.'));
+        c1.appendChild(createEl('p', '', '<strong>Method:</strong> 80% hands-on coding, 20% explanation. Every day ends with a concrete deliverable.'));
+        c1.appendChild(createEl('p', '', '<strong>Environment:</strong> Google Colab (recommended) or Jupyter Notebook. Packages: pandas, numpy, matplotlib, seaborn, scikit-learn.'));
+
+        const c2 = createCard('Course Outcomes');
+        const ol = createEl('ol');
+        [
+          'Write Python scripts to load, clean, and transform data',
+          'Use Pandas to answer questions from a dataset',
+          'Create charts with Matplotlib and Seaborn',
+          'Perform basic exploratory data analysis (EDA)',
+          'Explain core statistical concepts in plain English',
+          'Build a classification or regression model with scikit-learn',
+          'Evaluate a model with accuracy, confusion matrix, or error metrics',
+          'Present findings in a short 3-minute explanation',
+          'Maintain a GitHub repository with project notebooks',
+          'Know what to study next in university'
+        ].forEach(t => ol.appendChild(createEl('li', '', t)));
+        c2.appendChild(ol);
+
+        const c3 = createCard('Master Schedule');
+        c3.appendChild(createTable(
+          ['Day', 'Theme', 'Morning', 'Afternoon', 'Deliverable'],
+          [
+            ['Day 1', 'Python + Data Wrangling', 'Python essentials', 'Pandas basics', 'Cleaned CSV + summary stats'],
+            ['Day 2', 'EDA + Visualization', 'Exploratory analysis', 'Charts + stats', 'EDA notebook with 6+ charts'],
+            ['Day 3', 'ML + Capstone', 'First ML model', 'Complete mini-project', 'ML project on GitHub']
+          ]
+        ));
+
+        const c4 = createCard('Assessment');
+        c4.appendChild(createEl('p', '', 'No formal exam. Assessment based on:'));
+        c4.appendChild(createEl('ul', '', `
+          <li>Completed daily exercises</li>
+          <li>Final capstone project notebook</li>
+          <li>Short oral presentation on Day 3</li>
+          <li>GitHub repository with project files</li>
+        `));
+
+        const c5 = createCard('Materials Needed');
+        c5.appendChild(createEl('ul', '', `
+          <li>Laptop with internet</li>
+          <li>Google account</li>
+          <li>GitHub account</li>
+          <li>Web browser (Chrome recommended)</li>
+        `));
+
+        const container = createEl('div');
+        [c1, c2, c3, c4, c5].forEach(c => container.appendChild(c));
+        return container;
+      }
+    },
+    day1: {
+      title: '🐍 Day 1 Teacher',
+      render: () => {
+        const c1 = createCard('Day 1: Python + Pandas');
+        c1.appendChild(createEl('p', '', '<strong>Theme:</strong> Learn to speak Python and manipulate data tables.'));
+        c1.appendChild(createEl('p', '', '<strong>Deliverable:</strong> Cleaned dataset saved as CSV + summary statistics.'));
+        c1.appendChild(createTable(
+          ['Time', 'Topic', 'Format'],
+          [
+            ['09:00–09:30', 'Welcome + setup', 'Discussion'],
+            ['09:30–10:30', 'Python crash course', 'Live coding'],
+            ['10:30–10:45', 'Break', ''],
+            ['10:45–12:00', 'Python exercises', 'Hands-on'],
+            ['12:00–13:00', 'Lunch', ''],
+            ['13:00–14:00', 'Intro to Pandas', 'Live coding'],
+            ['14:00–14:45', 'Selecting & filtering', 'Hands-on'],
+            ['14:45–15:00', 'Break', ''],
+            ['15:00–16:30', 'Transformations & aggregation', 'Hands-on'],
+            ['16:30–17:00', 'Wrap-up + homework', 'Review']
+          ]
+        ));
+
+        c1.appendChild(createEl('h3', '', 'Slide-by-Slide Talking Points'));
+        const slides = [
+          ['Slide 1: Welcome', '3-day intensive for university data science prep. Goal: confidence + portfolio project. Rule: type every line of code yourself.'],
+          ['Slide 2: Tools', 'Google Colab: free Python notebooks. Python: main language of data science. Pandas: Excel-like tables in Python.'],
+          ['Slide 3: First Colab', 'Go to colab.research.google.com → New notebook → rename → type print("Hello, Data Science!") → Shift+Enter.'],
+          ['Slide 4: Why Python?', 'Easy to read, huge community, thousands of AI/data libraries, used in every university data science program.'],
+          ['Slide 5: Variables', 'A variable is a labeled box. Python guesses the type automatically.'],
+          ['Slide 6: Data Types', 'str (text), int (whole number), float (decimal), bool (true/false).'],
+          ['Slide 7: Lists', 'Ordered collection. Indexing, append, length.'],
+          ['Slide 8: Dictionaries', 'Key-value pairs. Like a real dictionary.'],
+          ['Slide 9: Conditions', 'if / elif / else.'],
+          ['Slide 10: Loops', 'for and while loops.'],
+          ['Slide 11: Functions', 'Reusable blocks. Take inputs, return outputs.'],
+          ['Slide 12: String Formatting', 'f-strings: f"{name} is {age} years old"'],
+          ['Slide 13: What is Pandas?', 'Python library for data tables. Like Excel but with code. Industry standard.'],
+          ['Slide 14: Import Pandas', 'import pandas as pd'],
+          ['Slide 15: Read CSV', 'df = pd.read_csv(url)'],
+          ['Slide 16: Inspect DataFrame', 'df.head(), df.tail(), df.shape, df.columns, df.info(), df.describe()'],
+          ['Slide 17: Series vs DataFrame', 'Series = one column. DataFrame = table of columns.'],
+          ['Slide 18: Select Columns', 'df["Name"] and df[["Name", "Age", "Survived"]]'],
+          ['Slide 19: Select Rows by Position', 'df.iloc[0] and df.iloc[0:5]'],
+          ['Slide 20: Filter by Condition', 'df[df["Age"] > 30], df[df["Sex"] == "female"], df[(df["Sex"] == "female") & (df["Fare"] > 50)]'],
+          ['Slide 21: Sort', 'df.sort_values("Age", ascending=False)'],
+          ['Slide 22: Add Columns', 'df["FamilySize"] = df["SibSp"] + df["Parch"] + 1'],
+          ['Slide 23: Drop Columns', 'df = df.drop(columns=["Cabin"])'],
+          ['Slide 24: Missing Values', 'df.isnull().sum(), df["Age"] = df["Age"].fillna(...), df = df.dropna()'],
+          ['Slide 25: Groupby', 'df.groupby("Sex")["Survived"].mean() and df.groupby("Pclass").agg({...})'],
+          ['Slide 26: Save Data', 'df.to_csv("cleaned_titanic.csv", index=False)'],
+          ['Slide 27-29: Wrap-Up', 'Review Python and Pandas. Homework: rebuild notebook from scratch. Preview Day 2.']
+        ];
+        slides.forEach(([title, text]) => c1.appendChild(createSlideBox(title, text)));
+
+        c1.appendChild(createDetails('📝 Day 1 Exercises', createEl('div', '', `
+          <p><strong>Exercise 1:</strong> Create variables for name, age, height, and whether you like data science. Print them.</p>
+          <p><strong>Exercise 2:</strong> Given prices = [12.5, 18.0, 7.5, 25.0, 10.0], print first/last, append 15.0, print length.</p>
+          <p><strong>Exercise 3:</strong> Use a loop to print every price with a 10% discount.</p>
+          <p><strong>Exercise 4:</strong> Write a function calculate_average(numbers) that returns the average.</p>
+          <p><strong>Exercise 5:</strong> Create a dictionary for a book with title, author, year. Add genre.</p>
+          <p><strong>Exercise 6:</strong> Load the Titanic CSV, find shape, columns, first 8 rows, summary stats.</p>
+          <p><strong>Exercise 7:</strong> Filter female passengers, fare > 50, first-class survivors, sort by age.</p>
+          <p><strong>Exercise 8:</strong> Compute average age, survival rate by class, average fare by port.</p>
+          <p><strong>Bonus:</strong> Create an AgeGroup column (Child/Adult/Senior).</p>
+        `)));
+
+        c1.appendChild(createDetails('✅ Day 1 Solutions', createCodeBlock(codeSnippets.d1_solutions, true)));
+        c1.appendChild(createDetails('🎤 Day 1 Live Coding Script', createCodeBlock(codeSnippets.d1_live, true)));
+        c1.appendChild(createTip('👩‍🏫 Instructor Tips — Day 1', 'Spend no more than 10 minutes on slides before live coding. When students get errors, ask: “What does the error message say?” Show them df.groupby? in Colab. Emphasize copying code is fine at this stage.'));
+        return c1;
+      }
+    },
+    day2: {
+      title: '📊 Day 2 Teacher',
+      render: () => {
+        const c1 = createCard('Day 2: EDA + Visualization + Statistics');
+        c1.appendChild(createEl('p', '', '<strong>Theme:</strong> Find stories in data and show them with charts.'));
+        c1.appendChild(createEl('p', '', '<strong>Deliverable:</strong> An EDA notebook with at least 6 charts and written insights.'));
+        c1.appendChild(createTable(
+          ['Time', 'Topic', 'Format'],
+          [
+            ['09:00–09:30', 'Recap Day 1 + quiz', 'Discussion'],
+            ['09:30–10:30', 'Exploratory Data Analysis', 'Live coding'],
+            ['10:30–10:45', 'Break', ''],
+            ['10:45–12:00', 'Statistics for data science', 'Lecture + code'],
+            ['12:00–13:00', 'Lunch', ''],
+            ['13:00–14:00', 'Matplotlib fundamentals', 'Live coding'],
+            ['14:00–14:45', 'Seaborn for better charts', 'Live coding'],
+            ['14:45–15:00', 'Break', ''],
+            ['15:00–16:30', 'Build an EDA report', 'Project work'],
+            ['16:30–17:00', 'Present findings', '2-min talks']
+          ]
+        ));
+
+        c1.appendChild(createEl('h3', '', 'Slide-by-Slide Talking Points'));
+        const slides = [
+          ['Slide 1: What is EDA?', 'Exploratory Data Analysis = understand data before building models. Ask questions, find patterns, find problems.'],
+          ['Slide 2: EDA Mindset', 'What is the shape? What does each column mean? Are there missing values? What are distributions? Are there relationships?'],
+          ['Slide 3: Quick Overview', 'df.shape, df.columns, df.info(), df.describe()'],
+          ['Slide 4: Value Counts', 'df["Sex"].value_counts(), df["Pclass"].value_counts(), df["Embarked"].value_counts()'],
+          ['Slide 5: Missing Data', 'df.isnull().sum() and df.isnull().sum() / len(df) * 100'],
+          ['Slide 6: Unique Values', 'df["Pclass"].nunique(), df["Pclass"].unique()'],
+          ['Slide 7: Descriptive Statistics', 'df["Age"].mean(), .median(), .std(), .min(), .max()'],
+          ['Slide 8: Distribution', 'Shows how often each value appears. Normal = bell curve.'],
+          ['Slide 9: Outliers', 'Values far from most data. Affect mean and ML models. Boxplots help detect.'],
+          ['Slide 10: Correlation', 'Measures how variables move together. Range -1 to +1.'],
+          ['Slide 11: Correlation ≠ Causation', 'Ice cream and drowning correlate because of summer heat. Always ask: is there a third factor?'],
+          ['Slide 12: Probability', 'Chance of an event. Example: survival rate among females.'],
+          ['Slide 13: Why Visualize?', 'Reveal patterns tables hide. Easier communication. Essential for presentations.'],
+          ['Slide 14: Matplotlib Import', 'import matplotlib.pyplot as plt; %matplotlib inline'],
+          ['Slide 15: Line Plot', 'plt.plot(x, y); plt.title(); plt.xlabel(); plt.ylabel(); plt.show()'],
+          ['Slide 16: Bar Chart', 'plt.bar(categories, values)'],
+          ['Slide 17: Histogram', 'plt.hist(df["Age"], bins=20, edgecolor="black")'],
+          ['Slide 18: Scatter Plot', 'plt.scatter(df["Age"], df["Fare"], alpha=0.5)'],
+          ['Slide 19: Why Seaborn?', 'Prettier with less code. Built on Matplotlib. Great for statistical plots.'],
+          ['Slide 20: Count Plot', 'sns.countplot(data=df, x="Sex")'],
+          ['Slide 21: Boxplot', 'sns.boxplot(data=df, x="Pclass", y="Age")'],
+          ['Slide 22: Histogram with KDE', 'sns.histplot(data=df, x="Age", kde=True, bins=20)'],
+          ['Slide 23: Correlation Heatmap', 'sns.heatmap(corr, annot=True, cmap="coolwarm")'],
+          ['Slide 24: Pairplot', 'sns.pairplot(df[["Age", "Fare", "Survived"]], hue="Survived")'],
+          ['Slide 25-27: EDA Report', 'Notebook sections: Introduction, Data Overview, Univariate Analysis, Bivariate Analysis, Correlation, Conclusions.']
+        ];
+        slides.forEach(([title, text]) => c1.appendChild(createSlideBox(title, text)));
+
+        c1.appendChild(createDetails('📝 Day 2 Exercises', createEl('div', '', `
+          <p><strong>Exercise 1:</strong> How many missing values per column? What percentage of Cabin is missing? How many unique Embarked values?</p>
+          <p><strong>Exercise 2:</strong> Compute mean, median, std, min, max for Fare. Compare mean vs median.</p>
+          <p><strong>Exercise 3:</strong> Survival rate for first class, third class, females under 18.</p>
+          <p><strong>Exercise 4:</strong> Create bar chart of Pclass, histogram of Fare (30 bins), scatter Age vs Fare colored by survival.</p>
+          <p><strong>Exercise 5:</strong> Seaborn count plot by Pclass + Sex, boxplot Fare by Survived, histogram Age with KDE.</p>
+          <p><strong>Exercise 6:</strong> Correlation matrix heatmap of Age, Fare, Pclass, SibSp, Parch, Survived. Find strongest correlation.</p>
+          <p><strong>Exercise 7:</strong> Build a full EDA report notebook.</p>
+          <p><strong>Bonus:</strong> Engineer FamilySize and plot survival rate by family size.</p>
+        `)));
+
+        c1.appendChild(createDetails('✅ Day 2 Solutions', createCodeBlock(codeSnippets.d2_solutions, true)));
+        c1.appendChild(createDetails('🎤 Day 2 Live Coding Script', createCodeBlock(codeSnippets.d2_live, true)));
+        c1.appendChild(createTip('👩‍🏫 Instructor Tips — Day 2', 'Encourage customization of colors, titles, labels. Teach plt.figure(figsize=(w,h)). Chart choice framework: numeric → histogram; categorical → bar; numeric vs categorical → boxplot; numeric vs numeric → scatter. Praise clear explanations over pretty charts.'));
+        return c1;
+      }
+    },
+    day3: {
+      title: '🤖 Day 3 Teacher',
+      render: () => {
+        const c1 = createCard('Day 3: Machine Learning + Capstone Project');
+        c1.appendChild(createEl('p', '', '<strong>Theme:</strong> Build a model and complete a real project.'));
+        c1.appendChild(createEl('p', '', '<strong>Deliverable:</strong> A complete machine learning project uploaded to GitHub.'));
+        c1.appendChild(createTable(
+          ['Time', 'Topic', 'Format'],
+          [
+            ['09:00–09:30', 'Recap Day 2', 'Discussion'],
+            ['09:30–10:30', 'Machine learning concepts', 'Lecture'],
+            ['10:30–10:45', 'Break', ''],
+            ['10:45–12:00', 'Build first ML model', 'Live coding'],
+            ['12:00–13:00', 'Lunch', ''],
+            ['13:00–14:00', 'Model evaluation', 'Hands-on'],
+            ['14:00–14:45', 'Choose capstone project', 'Planning'],
+            ['14:45–15:00', 'Break', ''],
+            ['15:00–16:30', 'Build capstone', 'Project work'],
+            ['16:30–17:00', 'Present + next steps', 'Demo + wrap-up']
+          ]
+        ));
+
+        c1.appendChild(createEl('h3', '', 'Slide-by-Slide Talking Points'));
+        const slides = [
+          ['Slide 1: What is ML?', 'Traditional: human writes rules. ML: computer learns patterns from data. Input + answers → model → predictions.'],
+          ['Slide 2: ML Recipe', '1. Collect data. 2. Prepare/clean. 3. Choose model. 4. Train. 5. Test. 6. Evaluate and improve.'],
+          ['Slide 3: Supervised Learning', 'Labeled examples. Classification: predict category. Regression: predict number.'],
+          ['Slide 4: Unsupervised Learning', 'No labels. Find patterns/groups. Example: customer segmentation.'],
+          ['Slide 5: Features and Target', 'X = features/inputs. y = target. Titanic: features = Age, Sex, Fare; target = Survived.'],
+          ['Slide 6: Train/Test Split', 'Train on one part, test on unseen part. Checks generalization.'],
+          ['Slide 7: Overfitting vs Underfitting', 'Underfitting: too simple. Overfitting: memorizes training. Goal: balance.'],
+          ['Slide 8: Prepare Data for ML', 'Select features, handle missing values, convert text to numbers.'],
+          ['Slide 9: Train a Model', 'LogisticRegression(max_iter=1000).fit(X_train, y_train)'],
+          ['Slide 10: Make Predictions', 'model.predict(X_test)'],
+          ['Slide 11: Accuracy', 'accuracy_score(y_test, predictions). Percentage correct.'],
+          ['Slide 12: Confusion Matrix', 'Rows = actual, columns = predicted. TN/FP/FN/TP.'],
+          ['Slide 13: Precision and Recall', 'Precision: predicted survivors who really survived. Recall: actual survivors found.'],
+          ['Slide 14: Feature Importance', 'DataFrame of features and coefficients.'],
+          ['Slide 15-17: Capstone Projects', 'Titanic Survival, Iris Flowers, House Prices. Requirements: load, clean, visualize, model, evaluate, conclude, upload.'],
+          ['Slide 18: Wrap-Up', 'What we learned in 3 days, 30-day plan, resources, encouragement.']
+        ];
+        slides.forEach(([title, text]) => c1.appendChild(createSlideBox(title, text)));
+
+        c1.appendChild(createDetails('📝 Day 3 Exercises', createEl('div', '', `
+          <p><strong>Exercise 1:</strong> Explain: supervised vs unsupervised, classification vs regression, train/test split, overfitting.</p>
+          <p><strong>Exercise 2:</strong> Write code to split X/y into 80/20 with random_state=42.</p>
+          <p><strong>Exercise 3:</strong> Using Titanic, build a survival model with Pclass, Sex, Age, Fare.</p>
+          <p><strong>Exercise 4:</strong> Print confusion matrix and classification report.</p>
+          <p><strong>Exercise 5:</strong> Create a DataFrame of feature coefficients.</p>
+          <p><strong>Exercise 6:</strong> Train a DecisionTreeClassifier and compare accuracy.</p>
+          <p><strong>Exercise 7:</strong> Complete the capstone project end-to-end.</p>
+          <p><strong>Exercise 8:</strong> Upload to GitHub.</p>
+          <p><strong>Bonus:</strong> Add Embarked as a feature using pd.get_dummies.</p>
+        `)));
+
+        c1.appendChild(createDetails('✅ Day 3 Solutions', createCodeBlock(codeSnippets.d3_solutions, true)));
+        c1.appendChild(createDetails('🎤 Day 3 Live Coding Script', createCodeBlock(codeSnippets.d3_live, true)));
+        c1.appendChild(createTip('👩‍🏫 Instructor Tips — Day 3', 'Keep ML theory light — focus on workflow. Emphasize train/test split understanding. If finished early, try Decision Tree. Encourage peer help. End with confidence: they have done real data science.'));
+        return c1;
+      }
+    },
+    capstones: {
+      title: '🎁 Capstones',
+      render: () => {
+        const c1 = createCard('Capstone Project Details');
+        c1.appendChild(createEl('p', '', 'Students choose one. Requirements for all:'));
+        c1.appendChild(createEl('ol', '', `
+          <li>Load and explore the data</li>
+          <li>Clean and prepare features</li>
+          <li>Create at least 3 visualizations</li>
+          <li>Build a machine learning model</li>
+          <li>Evaluate the model</li>
+          <li>Write conclusions</li>
+          <li>Save notebook and upload to GitHub</li>
+        `));
+
+        c1.appendChild(createEl('h3', '', '🚢 Titanic Survival Prediction'));
+        c1.appendChild(createCodeBlock(codeSnippets.titanic, true));
+
+        c1.appendChild(createEl('h3', '', '🌸 Iris Flower Classification'));
+        c1.appendChild(createCodeBlock(codeSnippets.iris, true));
+
+        c1.appendChild(createEl('h3', '', '🏠 California House Price Regression'));
+        c1.appendChild(createCodeBlock(codeSnippets.housing, true));
+        return c1;
+      }
+    },
+    resources: {
+      title: '🔗 Resources',
+      render: () => {
+        const c1 = createCard('Resources & Next Steps');
+        c1.appendChild(createEl('h3', '', '30-Day Post-Course Plan'));
+        c1.appendChild(createTable(
+          ['Week', 'Action'],
+          [
+            ['Week 1', 'Rebuild all 3 daily notebooks from memory'],
+            ['Week 2', 'Complete 2 Kaggle "Getting Started" competitions'],
+            ['Week 3', 'Learn Git branching; upload 3 projects to GitHub'],
+            ['Week 4', 'Read one data science case study per day']
+          ]
+        ));
+        c1.appendChild(createEl('h3', '', 'Useful Websites'));
+        c1.appendChild(createEl('ul', '', `
+          <li><strong>Google Colab:</strong> colab.research.google.com</li>
+          <li><strong>Kaggle:</strong> kaggle.com</li>
+          <li><strong>Pandas Docs:</strong> pandas.pydata.org/docs</li>
+          <li><strong>scikit-learn Docs:</strong> scikit-learn.org</li>
+          <li><strong>Stack Overflow:</strong> stackoverflow.com</li>
+          <li><strong>StatQuest:</strong> youtube.com/@statquest</li>
+        `));
+        return c1;
+      }
+    }
+  }
+};
+
+let currentMode = 'student';
+let currentPageId = 'welcome';
+
+function setMode(mode) {
+  currentMode = mode;
+  document.querySelector('.mode-btn.student').classList.toggle('active', mode === 'student');
+  document.querySelector('.mode-btn.teacher').classList.toggle('active', mode === 'teacher');
+  const ids = Object.keys(pages[mode]);
+  currentPageId = ids[0];
+  renderSidebar();
+  renderPage();
+}
+
+function renderSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.innerHTML = '';
+  const section = createEl('div');
+  section.appendChild(createEl('h3', '', currentMode === 'student' ? 'Student Menu' : 'Teacher Menu'));
+  Object.entries(pages[currentMode]).forEach(([id, page]) => {
+    const a = createEl('a', id === currentPageId ? 'active' : '', page.title);
+    a.addEventListener('click', () => {
+      currentPageId = id;
+      renderSidebar();
+      renderPage();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (window.innerWidth <= 768) toggleMenu(false);
+    });
+    section.appendChild(a);
+  });
+  sidebar.appendChild(section);
+}
+
+function renderPage() {
+  const content = document.getElementById('content');
+  content.innerHTML = '';
+  const page = pages[currentMode][currentPageId];
+  if (page) {
+    content.appendChild(page.render());
+  }
+  if (currentPageId === 'progress') updateProgress();
+}
+
+function toggleMenu(forceOpen) {
+  const sidebar = document.getElementById('sidebar');
+  const shouldOpen = forceOpen !== undefined ? forceOpen : !sidebar.classList.contains('open');
+  sidebar.classList.toggle('open', shouldOpen);
+}
+
+function updateProgress() {
+  const items = document.querySelectorAll('#mainChecklist li');
+  if (!items.length) return;
+  const checked = document.querySelectorAll('#mainChecklist li.checked').length;
+  const percent = Math.round((checked / items.length) * 100);
+  const fill = document.getElementById('progressFill');
+  fill.style.width = percent + '%';
+  fill.textContent = percent + '%';
+  const celebrate = document.querySelector('.celebrate');
+  if (celebrate) {
+    celebrate.style.display = percent === 100 ? 'block' : 'none';
+    if (percent === 100) confettiEffect();
+  }
+}
+
+function confettiEffect() {
+  const colors = ['#ff9a9e', '#fad0c4', '#f6d365', '#84fab0', '#8fd3f4', '#a18cd1'];
+  for (let i = 0; i < 50; i++) {
+    setTimeout(() => {
+      const c = document.createElement('div');
+      c.style.cssText = 'position:fixed;left:' + Math.random() * 100 + 'vw;top:-10px;width:10px;height:10px;border-radius:50%;z-index:9999;transition:top 2s ease-in,transform 2s ease-in;background:' + colors[Math.floor(Math.random() * colors.length)];
+      document.body.appendChild(c);
+      setTimeout(() => { c.style.top = '110vh'; c.style.transform = 'rotate(' + Math.random() * 360 + 'deg)'; }, 50);
+      setTimeout(() => c.remove(), 2100);
+    }, i * 30);
+  }
+}
+
+setMode('student');
+</script>
+
+</body>
+</html>
+
